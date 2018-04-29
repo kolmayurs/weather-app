@@ -1,11 +1,16 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {getLocation, fetchCurrentWeather, fetchForcastWeather} from '../actions/reduxActions';
+import {getLocation} from '../actions/reduxActions';
+
 
 function mapStateToProps(state){
-  return {location: [state.location.coords],
-    test: state.location.coords }
+  return {
+    latitude: state.location.latitude,
+    longitude: state.location.longitude,
+    loc_loading : state.location.loading,
+    loc_error: state.location.error,
+  }
 }
 
 function mapDispatchToProps(dispatch){
@@ -18,43 +23,28 @@ class App extends React.Component {
   constructor(props){
     super(props);
 
-    this.weather =this.weather.bind(this);
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.props.getLocation();
-        console.log('locations: ' + this.props.location);
-      /*  this.props.fetchCurrentWeather(this.props.test.latitude,this.props.test.latitude);
-          this.props.fetchForcastWeather(this.props.test.latitude,this.props.test.latitude);*/
-    //console.log(this.props.location);
-  }
-
-  weather(lat,lon){
-          /*this.props.fetchCurrentWeather(lat,lon);
-          this.props.fetchForcastWeather(lat,lon)*/
-                      //<button onClick={this.weather.bind(this,items.latitude,items.longitude)}>get Weather</button>
-  }
-  render() {
-      const loc = this.props.location.map(items => {
-         /*this.props.fetchCurrentWeather(items.latitude,items.longitude);
-          this.props.fetchForcastWeather(items.latitude,items.longitude)*/
-      return(
-          <div key={'loc_'+items}>
-            <div>Latitude: {items.latitude}</div>
-            <div>Longitue: {items.longitude}</div>
-
-          </div>
-        )
-    });
-
     
+}
 
-    return (
+
+  render() {
+    if(this.props.loc_loading){
+      return(<h1>loading...</h1>)
+    }
+    else{
+       return (
       <div className="App">
         <h1>Weather App</h1>
-        {loc}
+        {this.props.latitude} <br />
+        {this.props.longitude} <br /> 
       </div>
     );
+
+    }
 
   }
 }
